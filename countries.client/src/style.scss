@@ -1,0 +1,12 @@
+body {
+  min-height: 100vh;
+  margin: 0;
+  overflow-x: hidden;
+  display: flex;
+  justify-content: center;
+
+  #app {
+    flex-grow: 1;
+    max-width: 120rem;
+  }
+}
