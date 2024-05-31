@@ -1,0 +1,242 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Countries.Server",
+    "version": "1.0"
+  },
+  "paths": {
+    "/country": {
+      "get": {
+        "tags": [
+          "Country"
+        ],
+        "operationId": "GetCountries",
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Country"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Country": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "topLevelDomain": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "alpha2Code": {
+          "type": "string"
+        },
+        "alpha3Code": {
+          "type": "string"
+        },
+        "callingCodes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "capital": {
+          "type": "string"
+        },
+        "altSpellings": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "subRegion": {
+          "type": "string"
+        },
+        "region": {
+          "type": "string"
+        },
+        "population": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "latLng": {
+          "type": "array",
+          "items": {
+            "format": "int32",
+            "type": "integer"
+          }
+        },
+        "demonym": {
+          "type": "string"
+        },
+        "area": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "timezones": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "borders": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "nativeName": {
+          "type": "string"
+        },
+        "numericCode": {
+          "type": "string"
+        },
+        "flags": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Flag"
+          }
+        },
+        "currencies": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Currency"
+          }
+        },
+        "languages": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Language"
+          }
+        },
+        "translations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Translation"
+          }
+        },
+        "flag": {
+          "type": "string"
+        },
+        "regionalBlocs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/RegionalBloc"
+          }
+        },
+        "cioc": {
+          "type": "string"
+        },
+        "independent": {
+          "type": "boolean"
+        }
+      }
+    },
+    "Currency": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "symbol": {
+          "type": "string"
+        }
+      }
+    },
+    "Flag": {
+      "type": "object",
+      "properties": {
+        "svg": {
+          "type": "string"
+        },
+        "png": {
+          "type": "string"
+        }
+      }
+    },
+    "Language": {
+      "type": "object",
+      "properties": {
+        "Iso639_1": {
+          "type": "string"
+        },
+        "Iso639_2": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "nativeName": {
+          "type": "string"
+        }
+      }
+    },
+    "RegionalBloc": {
+      "type": "object",
+      "properties": {
+        "acronym": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        }
+      }
+    },
+    "Translation": {
+      "type": "object",
+      "properties": {
+        "br": {
+          "type": "string"
+        },
+        "pt": {
+          "type": "string"
+        },
+        "nl": {
+          "type": "string"
+        },
+        "hr": {
+          "type": "string"
+        },
+        "fa": {
+          "type": "string"
+        },
+        "de": {
+          "type": "string"
+        },
+        "es": {
+          "type": "string"
+        },
+        "fr": {
+          "type": "string"
+        },
+        "ja": {
+          "type": "string"
+        },
+        "it": {
+          "type": "string"
+        },
+        "hu": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}
