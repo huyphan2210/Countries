@@ -1,4 +1,9 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { useStore } from "vuex";
+
+const store = useStore();
+store.dispatch("getCountries");
+</script>
 
 <template>
   <header></header>
