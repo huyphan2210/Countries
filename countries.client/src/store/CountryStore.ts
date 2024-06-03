@@ -8,6 +8,10 @@ export const MUTATION_TYPES = {
   setCountries: "setCountries",
 };
 
+export const ACTION_TYPES = {
+  getCountries: "getCountries",
+};
+
 interface CountryState {
   countries: Country[];
 }
