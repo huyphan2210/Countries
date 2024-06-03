@@ -124,6 +124,9 @@ export class CountryService {
 
 export interface Country {
   /**  */
+  id?: ObjectId;
+
+  /**  */
   name?: string;
 
   /**  */
@@ -163,6 +166,9 @@ export interface Country {
   area?: number;
 
   /**  */
+  gini?: number;
+
+  /**  */
   timezones?: string[];
 
   /**  */
@@ -175,7 +181,7 @@ export interface Country {
   numericCode?: string;
 
   /**  */
-  flags?: Flag[];
+  flags?: Flag;
 
   /**  */
   currencies?: Currency[];
@@ -184,7 +190,7 @@ export interface Country {
   languages?: Language[];
 
   /**  */
-  translations?: Translation[];
+  translations?: Translation;
 
   /**  */
   flag?: string;
@@ -220,10 +226,10 @@ export interface Flag {
 
 export interface Language {
   /**  */
-  Iso639_1?: string;
+  iso6391?: string;
 
   /**  */
-  Iso639_2?: string;
+  iso6392?: string;
 
   /**  */
   name?: string;
@@ -232,12 +238,35 @@ export interface Language {
   nativeName?: string;
 }
 
+export interface ObjectId {
+  /**  */
+  timestamp?: number;
+
+  /**  */
+  machine?: number;
+
+  /**  */
+  pid?: number;
+
+  /**  */
+  increment?: number;
+
+  /**  */
+  creationTime?: Date;
+}
+
 export interface RegionalBloc {
   /**  */
   acronym?: string;
 
   /**  */
   name?: string;
+
+  /**  */
+  otherNames?: string[];
+
+  /**  */
+  otherAcronyms?: string[];
 }
 
 export interface Translation {
