@@ -1,12 +1,19 @@
 @import url("https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&display=swap");
 
 :root {
-  --dark-blue: hsl(209, 23%, 22%);
-  --very-dark-blue: hsl(207, 26%, 17%);
+  --element-bg: white;
+  --input-color: hsl(0, 0%, 52%);
+  --text-color: hsl(200, 15%, 8%);
+  
 
-  --very-dark-blue-light: hsl(200, 15%, 8%);
-  --dark-gray: hsl(0, 0%, 52%);
-  --light-gray: hsl(0, 0%, 98%);
+  &.dark-mode {
+    --dark-blue: hsl(209, 23%, 22%);
+    --very-dark-blue: hsl(207, 26%, 17%);
+
+    --very-dark-blue-light: hsl(200, 15%, 8%);
+    --dark-gray: hsl(0, 0%, 52%);
+    --light-gray: hsl(0, 0%, 98%);
+  }
 }
 
 body {
@@ -22,11 +29,15 @@ body {
   }
 }
 
-body, button, input, textarea {
+body,
+button,
+input,
+textarea {
   font-family: "Nunito Sans", sans-serif;
 }
 
-button, input {
+button,
+input {
   border-style: solid;
   &:hover {
     cursor: pointer;
