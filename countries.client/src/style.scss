@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&display=swap");
+
 :root {
   --dark-blue: hsl(209, 23%, 22%);
   --very-dark-blue: hsl(207, 26%, 17%);
@@ -17,5 +19,16 @@ body {
   #app {
     flex-grow: 1;
     max-width: 120rem;
+  }
+}
+
+body, button, input, textarea {
+  font-family: "Nunito Sans", sans-serif;
+}
+
+button, input {
+  border-style: solid;
+  &:hover {
+    cursor: pointer;
   }
 }

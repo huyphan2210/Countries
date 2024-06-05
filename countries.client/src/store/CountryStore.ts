@@ -6,23 +6,29 @@ const countryAPI = new CountryAPI();
 
 export const MUTATION_TYPES = {
   setCountries: "setCountries",
+  setIsDarkMode: "setIsDarkMode",
 };
 
 export const ACTION_TYPES = {
   getCountries: "getCountries",
 };
 
-interface CountryState {
+export interface CountryState {
   countries: Country[];
+  isDarkMode: boolean;
 }
 
 export const store = createStore<CountryState>({
   state: {
     countries: [],
+    isDarkMode: false,
   },
   mutations: {
     setCountries(state: CountryState, countries: Country[]) {
       state.countries = [...countries];
+    },
+    setIsDarkMode(state: CountryState) {
+      state.isDarkMode = !state.isDarkMode ;
     },
   },
   actions: {
