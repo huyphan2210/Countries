@@ -4,16 +4,20 @@
   --element-bg: white;
   --input-color: hsl(0, 0%, 52%);
   --text-color: hsl(200, 15%, 8%);
+  --main-bg: hsl(0, 0%, 98%);
   
-
+  --border-radius: 0.5rem;
   &.dark-mode {
-    --dark-blue: hsl(209, 23%, 22%);
-    --very-dark-blue: hsl(207, 26%, 17%);
-
-    --very-dark-blue-light: hsl(200, 15%, 8%);
-    --dark-gray: hsl(0, 0%, 52%);
-    --light-gray: hsl(0, 0%, 98%);
+    --element-bg: hsl(209, 23%, 22%);
+    --input-color: white;
+    --text-color: white;
+    --main-bg: hsl(207, 26%, 17%);
   }
+}
+
+* {
+  transition: 0.3s;
+  color: var(--text-color);
 }
 
 body {
@@ -22,6 +26,7 @@ body {
   overflow-x: hidden;
   display: flex;
   justify-content: center;
+  transition: 0.3s;
 
   #app {
     flex-grow: 1;
@@ -32,13 +37,18 @@ body {
 body,
 button,
 input,
-textarea {
+textarea,
+select,
+option {
   font-family: "Nunito Sans", sans-serif;
 }
 
 button,
 input {
   border-style: solid;
+}
+
+button {
   &:hover {
     cursor: pointer;
   }

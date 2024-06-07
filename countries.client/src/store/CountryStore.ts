@@ -28,7 +28,12 @@ export const store = createStore<CountryState>({
       state.countries = [...countries];
     },
     setIsDarkMode(state: CountryState) {
-      state.isDarkMode = !state.isDarkMode ;
+      state.isDarkMode = !state.isDarkMode;
+      if (state.isDarkMode) {
+        document.documentElement.classList.add('dark-mode');
+      } else {
+        document.documentElement.classList.remove('dark-mode');
+      }
     },
   },
   actions: {
