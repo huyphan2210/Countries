@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Store, useStore } from "vuex";
-import { computed } from "vue";
+import { computed, ref } from "vue";
 import {
   ACTION_TYPES,
   MUTATION_TYPES,
@@ -11,11 +11,15 @@ import moonLight from "./assets/moon-light.svg";
 import moonDark from "./assets/moon-dark.svg";
 import searchLight from "./assets/search-light.svg";
 import searchDark from "./assets/search-dark.svg";
+import chevron from "./assets/chevron.svg";
 
 const store: Store<CountryState> = useStore();
 store.dispatch(ACTION_TYPES.getCountries);
 
 const isDarkMode = computed(() => store.state.isDarkMode);
+const regions: string[] = ["Africa", "America", "Asia", "Europe", "Oceania"];
+
+const isFilterOpened = ref(false);
 </script>
 
 <template>
@@ -48,13 +52,24 @@ const isDarkMode = computed(() => store.state.isDarkMode);
         <img v-else :src="searchDark" loading="lazy" alt="Search Dark" />
         <input placeholder="Search for a country..." type="text" />
       </div>
-      <div class="filter-section__options">
-        <select title="Filter by Region" value="">
-          <option value="" hidden>Filter by Region</option>
-          <option value="Asia">Asia</option>
-          <option value="Europe">Europe</option>
-        </select>
-      </div>
+      <button
+        type="button"
+        class="filter-section__options"
+        :class="isFilterOpened ? 'opened' : ''"
+        @click="
+          () => {
+            isFilterOpened = !isFilterOpened;
+          }
+        "
+      >
+        <span>Filter by Region</span>
+        <img :src="chevron" loading="lazy" alt="Chevron" />
+        <ul class="filter-section__options__region">
+          <li v-for="(region, index) in regions" :key="index">
+            {{ region }}
+          </li>
+        </ul>
+      </button>
     </section>
   </main>
   <footer></footer>
@@ -129,11 +144,46 @@ main {
     }
 
     &__options {
-      select {
-        background-color: transparent;
+      position: relative;
+      border: none;
+      background-color: var(--element-bg);
+      padding: 1rem 1.5rem;
+      border-radius: var(--border-radius);
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+
+      img {
+        width: 1rem;
+      }
+
+      &__region {
+        position: absolute;
+        top: 0;
+        width: calc(100% - 3rem);
+        left: 0;
+        background-color: var(--element-bg);
         padding: 1rem 1.5rem;
-        option {
-          background-color: var(--element-bg);
+        border-radius: var(--border-radius);
+        margin: 0;
+        list-style: none;
+        display: grid;
+        gap: 1rem;
+        opacity: 0;
+
+        li {
+          text-align: left;
+        }
+      }
+
+      &.opened {
+        img {
+          transform: rotate(180deg);
+        }
+
+        .filter-section__options__region {
+          top: calc(100% + 1rem);
+          opacity: 1;
         }
       }
     }
