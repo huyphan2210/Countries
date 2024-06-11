@@ -7,6 +7,7 @@ const countryAPI = new CountryAPI();
 export const MUTATION_TYPES = {
   setCountries: "setCountries",
   setIsDarkMode: "setIsDarkMode",
+  setCurrentRegion: "setCurrentRegion",
 };
 
 export const ACTION_TYPES = {
@@ -14,12 +15,14 @@ export const ACTION_TYPES = {
 };
 
 export interface CountryState {
+  currentRegion: string;
   countries: Country[];
   isDarkMode: boolean;
 }
 
 export const store = createStore<CountryState>({
   state: {
+    currentRegion: "",
     countries: [],
     isDarkMode: false,
   },
@@ -30,10 +33,13 @@ export const store = createStore<CountryState>({
     setIsDarkMode(state: CountryState) {
       state.isDarkMode = !state.isDarkMode;
       if (state.isDarkMode) {
-        document.documentElement.classList.add('dark-mode');
+        document.documentElement.classList.add("dark-mode");
       } else {
-        document.documentElement.classList.remove('dark-mode');
+        document.documentElement.classList.remove("dark-mode");
       }
+    },
+    setCurrentRegion(state: CountryState, region: string) {
+      state.currentRegion = region;
     },
   },
   actions: {

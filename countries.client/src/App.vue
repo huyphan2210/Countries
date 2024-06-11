@@ -62,11 +62,22 @@ const isFilterOpened = ref(false);
           }
         "
       >
-        <span>Filter by Region</span>
+        <span>{{
+          store.state.currentRegion
+            ? store.state.currentRegion
+            : "Filter by Region"
+        }}</span>
         <img :src="chevron" loading="lazy" alt="Chevron" />
         <ul class="filter-section__options__region">
           <li v-for="(region, index) in regions" :key="index">
-            {{ region }}
+            <button
+              type="button"
+              @click="
+                () => store.commit(MUTATION_TYPES.setCurrentRegion, region)
+              "
+            >
+              {{ region }}
+            </button>
           </li>
         </ul>
       </button>
@@ -173,6 +184,10 @@ main {
 
         li {
           text-align: left;
+          button {
+            border: none;
+            background-color: transparent;
+          }
         }
       }
 
