@@ -6,7 +6,7 @@ import {
   MUTATION_TYPES,
   type CountryState,
 } from "./store/CountryStore";
-
+import CountryCard from "./components/CountryCard.vue";
 import moonLight from "./assets/moon-light.svg";
 import moonDark from "./assets/moon-dark.svg";
 import searchLight from "./assets/search-light.svg";
@@ -82,6 +82,13 @@ const isFilterOpened = ref(false);
         </ul>
       </button>
     </section>
+    <section class="countries-section">
+      <country-card
+        v-for="(country, index) in store.state.countries"
+        :key="index"
+        :country="country"
+      ></country-card>
+    </section>
   </main>
   <footer></footer>
 </template>
@@ -128,12 +135,14 @@ main {
     align-items: center;
     gap: 1.5rem;
     flex-wrap: wrap;
+    margin-bottom: 1.5rem;
     &__search-wrapper {
       border-radius: var(--border-radius);
       background-color: var(--element-bg);
       padding: 1rem 1.5rem;
       display: flex;
       gap: 1rem;
+      width: 100%;
       max-width: 30rem;
 
       img {
@@ -163,6 +172,8 @@ main {
       display: flex;
       gap: 1rem;
       align-items: center;
+      justify-content: space-between;
+      min-width: 10rem;
 
       img {
         width: 1rem;
@@ -180,6 +191,7 @@ main {
         list-style: none;
         display: grid;
         gap: 1rem;
+        z-index: -1;
         opacity: 0;
 
         li {
@@ -198,9 +210,23 @@ main {
 
         .filter-section__options__region {
           top: calc(100% + 1rem);
+          z-index: 0;
           opacity: 1;
         }
       }
+    }
+  }
+
+  .countries-section {
+    display: grid;
+    gap: 1rem;
+  }
+}
+
+@media screen and (min-width: 768px) {
+  main {
+    .countries-section {
+      grid-template-columns: repeat(2, auto);
     }
   }
 }
