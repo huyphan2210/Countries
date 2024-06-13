@@ -219,7 +219,7 @@ main {
 
   .countries-section {
     display: grid;
-    gap: 1rem;
+    gap: 1.5rem;
   }
 }
 
@@ -227,6 +227,24 @@ main {
   main {
     .countries-section {
       grid-template-columns: repeat(2, auto);
+      gap: 3rem;
+    }
+  }
+}
+
+@media screen and (min-width: 1024px) {
+  main {
+    .countries-section {
+      grid-template-columns: repeat(3, auto);
+      gap: 6rem;
+    }
+  }
+}
+
+@media screen and (min-width: 1440px) {
+  main {
+    .countries-section {
+      grid-template-columns: repeat(4, auto);
     }
   }
 }
