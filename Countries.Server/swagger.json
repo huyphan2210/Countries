@@ -18,7 +18,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Success",
+            "description": "OK",
             "schema": {
               "type": "array",
               "items": {
@@ -32,6 +32,19 @@
   },
   "definitions": {
     "Country": {
+      "required": [
+        "altSpellings",
+        "borders",
+        "callingCodes",
+        "currencies",
+        "flags",
+        "languages",
+        "latLng",
+        "regionalBlocs",
+        "timezones",
+        "topLevelDomain",
+        "translations"
+      ],
       "type": "object",
       "properties": {
         "id": {
@@ -146,7 +159,8 @@
         "independent": {
           "type": "boolean"
         }
-      }
+      },
+      "additionalProperties": false
     },
     "Currency": {
       "type": "object",
@@ -160,7 +174,8 @@
         "symbol": {
           "type": "string"
         }
-      }
+      },
+      "additionalProperties": false
     },
     "Flag": {
       "type": "object",
@@ -171,7 +186,8 @@
         "png": {
           "type": "string"
         }
-      }
+      },
+      "additionalProperties": false
     },
     "Language": {
       "type": "object",
@@ -188,7 +204,8 @@
         "nativeName": {
           "type": "string"
         }
-      }
+      },
+      "additionalProperties": false
     },
     "ObjectId": {
       "type": "object",
@@ -218,7 +235,8 @@
           "type": "string",
           "readOnly": true
         }
-      }
+      },
+      "additionalProperties": false
     },
     "RegionalBloc": {
       "type": "object",
@@ -241,7 +259,8 @@
             "type": "string"
           }
         }
-      }
+      },
+      "additionalProperties": false
     },
     "Translation": {
       "type": "object",
@@ -279,7 +298,8 @@
         "hu": {
           "type": "string"
         }
-      }
+      },
+      "additionalProperties": false
     }
   }
 }

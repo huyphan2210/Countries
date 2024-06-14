@@ -1,6 +1,6 @@
 ﻿using Countries.Server.Models;
-using Microsoft.Extensions.Configuration;
 using MongoDB.Driver;
+using System.Security.Authentication;
 
 namespace Countries.Server.Repositories
 {
@@ -16,6 +16,7 @@ namespace Countries.Server.Repositories
             var connectionString = connectionStringTemplate.Replace("{password}", connectionPassword);
             var settings = MongoClientSettings.FromConnectionString(connectionString);
             settings.ServerApi = new ServerApi(ServerApiVersion.V1);
+            settings.SslSettings = new SslSettings() { EnabledSslProtocols = SslProtocols.Tls12 };
 
             var client = new MongoClient(settings);
             var database = client.GetDatabase("country-database");
