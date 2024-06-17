@@ -27,6 +27,7 @@ body {
   display: flex;
   justify-content: center;
   transition: 0.3s;
+  background-color: var(--main-bg);
 
   #app {
     flex-grow: 1;

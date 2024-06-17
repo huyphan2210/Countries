@@ -1,12 +1,13 @@
 <script setup lang="ts">
 import { Store, useStore } from "vuex";
-import { computed, ref } from "vue";
+import { computed, ref, onMounted, onUnmounted } from "vue";
 import {
   ACTION_TYPES,
   MUTATION_TYPES,
   type CountryState,
 } from "./store/CountryStore";
 import CountryCard from "./components/CountryCard.vue";
+import LoadingScreen from "./components/LoadingScreen.vue";
 import moonLight from "./assets/moon-light.svg";
 import moonDark from "./assets/moon-dark.svg";
 import searchLight from "./assets/search-light.svg";
@@ -17,9 +18,31 @@ const store: Store<CountryState> = useStore();
 store.dispatch(ACTION_TYPES.getCountries);
 
 const isDarkMode = computed(() => store.state.isDarkMode);
+if (isDarkMode.value) {
+  document.documentElement.classList.add("dark-mode");
+}
 const regions: string[] = ["Africa", "America", "Asia", "Europe", "Oceania"];
 
 const isFilterOpened = ref(false);
+
+const handleScroll = () => {
+  const scrollTop = window.scrollY || document.documentElement.scrollTop;
+  const scrollHeight = document.documentElement.scrollHeight;
+  const clientHeight = document.documentElement.clientHeight;
+
+  if (scrollTop + clientHeight >= scrollHeight - 5) {
+    store.commit(MUTATION_TYPES.setPagination);
+    store.dispatch(ACTION_TYPES.getCountries);
+  }
+};
+
+onMounted(() => {
+  window.addEventListener("scroll", handleScroll);
+});
+
+onUnmounted(() => {
+  window.removeEventListener("scroll", handleScroll);
+});
 </script>
 
 <template>
@@ -41,6 +64,7 @@ const isFilterOpened = ref(false);
     </button>
   </header>
   <main>
+    <loading-screen v-if="store.state.isFetchingData" />
     <section class="filter-section">
       <div class="filter-section__search-wrapper">
         <img
@@ -128,7 +152,6 @@ header {
 }
 
 main {
-  background-color: var(--main-bg);
   .filter-section {
     display: flex;
     justify-content: space-between;
