@@ -1,4 +1,5 @@
 ﻿using Countries.Server.Models;
+using Countries.Server.Models.DTOs;
 using MongoDB.Driver;
 using System.Security.Authentication;
 
@@ -23,12 +24,26 @@ namespace Countries.Server.Repositories
             _countries = database.GetCollection<Country>("country");
         }
 
-        public async Task<IList<Country>> GetCountries()
+        public async Task<IList<GetCountriesResponse>> GetCountries(int page, int pageSize)
         {
+            var option = new FindOptions<Country>
+            {
+                Skip = (page - 1) * pageSize,
+                Limit = pageSize
+            };
+
             try
             {
-                var allCountries = await _countries.FindAsync(country => true).ConfigureAwait(false);
-                return allCountries.ToList();
+                var allCountries = await _countries.FindAsync(country => true, option).ConfigureAwait(false);
+                var countries = allCountries.ToList().Select(country => new GetCountriesResponse
+                {
+                    Name = country.Name,
+                    Region = country.Region,
+                    Capital = country.Capital,
+                    Population = country.Population,
+                    Flag = country.Flag,
+                });
+                return countries.ToList();
             }
             catch (Exception e)
             {

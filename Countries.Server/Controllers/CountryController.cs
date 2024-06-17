@@ -1,4 +1,4 @@
-using Countries.Server.Models;
+using Countries.Server.Models.DTOs;
 using Countries.Server.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -18,10 +18,10 @@ namespace Countries.Server.Controllers
         }
 
         [HttpGet(Name = "GetCountries")]
-        public async Task<IList<Country>> GetCountries()
+        public async Task<IList<GetCountriesResponse>> GetCountries([FromQuery] int page, [FromQuery] int pageSize)
         {
             _logger.LogInformation("Start to get countries");
-           return await _countryService.GetCountries();
+           return await _countryService.GetCountries(page, pageSize);
         }
     }
 }

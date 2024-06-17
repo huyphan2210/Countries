@@ -16,13 +16,27 @@
           "application/json",
           "text/json"
         ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "page",
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "in": "query",
+            "name": "pageSize",
+            "type": "integer",
+            "format": "int32"
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK",
             "schema": {
               "type": "array",
               "items": {
-                "$ref": "#/definitions/Country"
+                "$ref": "#/definitions/GetCountriesResponse"
               }
             }
           }
@@ -31,271 +45,23 @@
     }
   },
   "definitions": {
-    "Country": {
-      "required": [
-        "altSpellings",
-        "borders",
-        "callingCodes",
-        "currencies",
-        "flags",
-        "languages",
-        "latLng",
-        "regionalBlocs",
-        "timezones",
-        "topLevelDomain",
-        "translations"
-      ],
+    "GetCountriesResponse": {
       "type": "object",
       "properties": {
-        "id": {
-          "$ref": "#/definitions/ObjectId"
-        },
         "name": {
           "type": "string"
         },
-        "topLevelDomain": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        },
-        "alpha2Code": {
-          "type": "string"
-        },
-        "alpha3Code": {
-          "type": "string"
-        },
-        "callingCodes": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        },
         "capital": {
-          "type": "string"
-        },
-        "altSpellings": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        },
-        "subRegion": {
-          "type": "string"
-        },
-        "region": {
           "type": "string"
         },
         "population": {
           "format": "int32",
           "type": "integer"
         },
-        "latLng": {
-          "type": "array",
-          "items": {
-            "format": "double",
-            "type": "number"
-          }
-        },
-        "demonym": {
+        "region": {
           "type": "string"
-        },
-        "area": {
-          "format": "double",
-          "type": "number"
-        },
-        "gini": {
-          "format": "double",
-          "type": "number"
-        },
-        "timezones": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        },
-        "borders": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        },
-        "nativeName": {
-          "type": "string"
-        },
-        "numericCode": {
-          "type": "string"
-        },
-        "flags": {
-          "$ref": "#/definitions/Flag"
-        },
-        "currencies": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/Currency"
-          }
-        },
-        "languages": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/Language"
-          }
-        },
-        "translations": {
-          "$ref": "#/definitions/Translation"
         },
         "flag": {
-          "type": "string"
-        },
-        "regionalBlocs": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/RegionalBloc"
-          }
-        },
-        "cioc": {
-          "type": "string"
-        },
-        "independent": {
-          "type": "boolean"
-        }
-      },
-      "additionalProperties": false
-    },
-    "Currency": {
-      "type": "object",
-      "properties": {
-        "code": {
-          "type": "string"
-        },
-        "name": {
-          "type": "string"
-        },
-        "symbol": {
-          "type": "string"
-        }
-      },
-      "additionalProperties": false
-    },
-    "Flag": {
-      "type": "object",
-      "properties": {
-        "svg": {
-          "type": "string"
-        },
-        "png": {
-          "type": "string"
-        }
-      },
-      "additionalProperties": false
-    },
-    "Language": {
-      "type": "object",
-      "properties": {
-        "iso6391": {
-          "type": "string"
-        },
-        "iso6392": {
-          "type": "string"
-        },
-        "name": {
-          "type": "string"
-        },
-        "nativeName": {
-          "type": "string"
-        }
-      },
-      "additionalProperties": false
-    },
-    "ObjectId": {
-      "type": "object",
-      "properties": {
-        "timestamp": {
-          "format": "int32",
-          "type": "integer",
-          "readOnly": true
-        },
-        "machine": {
-          "format": "int32",
-          "type": "integer",
-          "readOnly": true
-        },
-        "pid": {
-          "format": "int32",
-          "type": "integer",
-          "readOnly": true
-        },
-        "increment": {
-          "format": "int32",
-          "type": "integer",
-          "readOnly": true
-        },
-        "creationTime": {
-          "format": "date-time",
-          "type": "string",
-          "readOnly": true
-        }
-      },
-      "additionalProperties": false
-    },
-    "RegionalBloc": {
-      "type": "object",
-      "properties": {
-        "acronym": {
-          "type": "string"
-        },
-        "name": {
-          "type": "string"
-        },
-        "otherNames": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        },
-        "otherAcronyms": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        }
-      },
-      "additionalProperties": false
-    },
-    "Translation": {
-      "type": "object",
-      "properties": {
-        "br": {
-          "type": "string"
-        },
-        "pt": {
-          "type": "string"
-        },
-        "nl": {
-          "type": "string"
-        },
-        "hr": {
-          "type": "string"
-        },
-        "fa": {
-          "type": "string"
-        },
-        "de": {
-          "type": "string"
-        },
-        "es": {
-          "type": "string"
-        },
-        "fr": {
-          "type": "string"
-        },
-        "ja": {
-          "type": "string"
-        },
-        "it": {
-          "type": "string"
-        },
-        "hu": {
           "type": "string"
         }
       },

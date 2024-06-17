@@ -111,195 +111,39 @@ export class CountryService {
   /**
    *
    */
-  static getCountries(options: IRequestOptions = {}): Promise<Country[]> {
+  static getCountries(
+    params: {
+      /**  */
+      page?: number;
+      /**  */
+      pageSize?: number;
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<GetCountriesResponse[]> {
     return new Promise((resolve, reject) => {
       let url = basePath + '/country';
 
       const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
+      configs.params = { page: params['page'], pageSize: params['pageSize'] };
 
       axios(configs, resolve, reject);
     });
   }
 }
 
-export interface Country {
-  /**  */
-  id?: ObjectId;
-
+export interface GetCountriesResponse {
   /**  */
   name?: string;
-
-  /**  */
-  topLevelDomain?: string[];
-
-  /**  */
-  alpha2Code?: string;
-
-  /**  */
-  alpha3Code?: string;
-
-  /**  */
-  callingCodes?: string[];
 
   /**  */
   capital?: string;
 
   /**  */
-  altSpellings?: string[];
-
-  /**  */
-  subRegion?: string;
+  population?: number;
 
   /**  */
   region?: string;
 
   /**  */
-  population?: number;
-
-  /**  */
-  latLng?: number[];
-
-  /**  */
-  demonym?: string;
-
-  /**  */
-  area?: number;
-
-  /**  */
-  gini?: number;
-
-  /**  */
-  timezones?: string[];
-
-  /**  */
-  borders?: string[];
-
-  /**  */
-  nativeName?: string;
-
-  /**  */
-  numericCode?: string;
-
-  /**  */
-  flags?: Flag;
-
-  /**  */
-  currencies?: Currency[];
-
-  /**  */
-  languages?: Language[];
-
-  /**  */
-  translations?: Translation;
-
-  /**  */
   flag?: string;
-
-  /**  */
-  regionalBlocs?: RegionalBloc[];
-
-  /**  */
-  cioc?: string;
-
-  /**  */
-  independent?: boolean;
-}
-
-export interface Currency {
-  /**  */
-  code?: string;
-
-  /**  */
-  name?: string;
-
-  /**  */
-  symbol?: string;
-}
-
-export interface Flag {
-  /**  */
-  svg?: string;
-
-  /**  */
-  png?: string;
-}
-
-export interface Language {
-  /**  */
-  iso6391?: string;
-
-  /**  */
-  iso6392?: string;
-
-  /**  */
-  name?: string;
-
-  /**  */
-  nativeName?: string;
-}
-
-export interface ObjectId {
-  /**  */
-  timestamp?: number;
-
-  /**  */
-  machine?: number;
-
-  /**  */
-  pid?: number;
-
-  /**  */
-  increment?: number;
-
-  /**  */
-  creationTime?: Date;
-}
-
-export interface RegionalBloc {
-  /**  */
-  acronym?: string;
-
-  /**  */
-  name?: string;
-
-  /**  */
-  otherNames?: string[];
-
-  /**  */
-  otherAcronyms?: string[];
-}
-
-export interface Translation {
-  /**  */
-  br?: string;
-
-  /**  */
-  pt?: string;
-
-  /**  */
-  nl?: string;
-
-  /**  */
-  hr?: string;
-
-  /**  */
-  fa?: string;
-
-  /**  */
-  de?: string;
-
-  /**  */
-  es?: string;
-
-  /**  */
-  fr?: string;
-
-  /**  */
-  ja?: string;
-
-  /**  */
-  it?: string;
-
-  /**  */
-  hu?: string;
 }
