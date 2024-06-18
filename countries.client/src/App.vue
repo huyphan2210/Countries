@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Store, useStore } from "vuex";
-import { computed, ref, onMounted, onUnmounted } from "vue";
+import { ref, onMounted, onUnmounted } from "vue";
 import {
   ACTION_TYPES,
   MUTATION_TYPES,
@@ -14,11 +14,10 @@ import searchLight from "./assets/search-light.svg";
 import searchDark from "./assets/search-dark.svg";
 import chevron from "./assets/chevron.svg";
 
-const store: Store<CountryState> = useStore();
-store.dispatch(ACTION_TYPES.getCountries);
+const { state, dispatch, commit }: Store<CountryState> = useStore();
+dispatch(ACTION_TYPES.getCountries);
 
-const isDarkMode = computed(() => store.state.isDarkMode);
-if (isDarkMode.value) {
+if (state.isDarkMode) {
   document.documentElement.classList.add("dark-mode");
 }
 const regions: string[] = ["Africa", "America", "Asia", "Europe", "Oceania"];
@@ -30,9 +29,12 @@ const handleScroll = () => {
   const scrollHeight = document.documentElement.scrollHeight;
   const clientHeight = document.documentElement.clientHeight;
 
-  if (scrollTop + clientHeight >= scrollHeight - 5) {
-    store.commit(MUTATION_TYPES.setPagination);
-    store.dispatch(ACTION_TYPES.getCountries);
+  if (
+    scrollTop + clientHeight >= scrollHeight - 5 &&
+    state.countries.length < state.totalCountries
+  ) {
+    commit(MUTATION_TYPES.setPagination);
+    dispatch(ACTION_TYPES.getCountries);
   }
 };
 
@@ -51,10 +53,10 @@ onUnmounted(() => {
     <button
       class="dark-mode-button"
       type="button"
-      @click="() => store.commit(MUTATION_TYPES.setIsDarkMode)"
+      @click="() => commit(MUTATION_TYPES.setIsDarkMode)"
     >
       <img
-        v-if="!isDarkMode"
+        v-if="!state.isDarkMode"
         :src="moonLight"
         loading="lazy"
         alt="Moon Light"
@@ -64,17 +66,24 @@ onUnmounted(() => {
     </button>
   </header>
   <main>
-    <loading-screen v-if="store.state.isFetchingData" />
+    <loading-screen v-if="state.isFetchingData" />
     <section class="filter-section">
       <div class="filter-section__search-wrapper">
         <img
-          v-if="!isDarkMode"
+          v-if="!state.isDarkMode"
           :src="searchLight"
           loading="lazy"
           alt="Search Light"
         />
         <img v-else :src="searchDark" loading="lazy" alt="Search Dark" />
-        <input placeholder="Search for a country..." type="text" />
+        <input
+          @change="(e) => {
+            commit(MUTATION_TYPES.setSearchString, (e.currentTarget as HTMLInputElement).value);
+            dispatch(ACTION_TYPES.getCountries);
+          }"
+          placeholder="Search for a country..."
+          type="text"
+        />
       </div>
       <button
         type="button"
@@ -87,9 +96,7 @@ onUnmounted(() => {
         "
       >
         <span>{{
-          store.state.currentRegion
-            ? store.state.currentRegion
-            : "Filter by Region"
+          state.currentRegion ? state.currentRegion : "Filter by Region"
         }}</span>
         <img :src="chevron" loading="lazy" alt="Chevron" />
         <ul class="filter-section__options__region">
@@ -97,7 +104,10 @@ onUnmounted(() => {
             <button
               type="button"
               @click="
-                () => store.commit(MUTATION_TYPES.setCurrentRegion, region)
+                () => {
+                  commit(MUTATION_TYPES.setCurrentRegion, region);
+                  dispatch(ACTION_TYPES.getCountries);
+                }
               "
             >
               {{ region }}
@@ -108,7 +118,7 @@ onUnmounted(() => {
     </section>
     <section class="countries-section">
       <country-card
-        v-for="(country, index) in store.state.countries"
+        v-for="(country, index) in state.countries"
         :key="index"
         :country="country"
       ></country-card>
@@ -131,6 +141,7 @@ header {
   background-color: var(--element-bg);
   position: sticky;
   top: 0;
+  z-index: 1;
   h1 {
     font-size: 1rem;
   }
@@ -153,6 +164,8 @@ header {
 
 main {
   .filter-section {
+    position: sticky;
+    top: 0;
     display: flex;
     justify-content: space-between;
     align-items: center;
