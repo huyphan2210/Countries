@@ -14,7 +14,17 @@ export default class CountryAPI {
     serviceOptions.axios = this.axiosInstance;
   }
 
-  getCountries(page: number, pageSize: number) {
-    return CountryService.getCountries({ page, pageSize });
+  getCountries(
+    page: number,
+    pageSize: number,
+    searchString?: string,
+    region?: string
+  ) {
+    return CountryService.getCountries({
+      page,
+      pageSize,
+      searchString,
+      region,
+    });
   }
 }
