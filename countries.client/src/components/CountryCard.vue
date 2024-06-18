@@ -1,8 +1,8 @@
 <script lang="ts" setup>
-import type { GetCountriesResponse as FrontPageCountries  } from "@/swagger/api";
+import type { CountryBriefInfo  } from "@/swagger/api";
 import { defineProps } from "vue";
 
-const { country } = defineProps<{ country: FrontPageCountries }>();
+const { country } = defineProps<{ country: CountryBriefInfo }>();
 </script>
 
 <template>
