@@ -1,5 +1,4 @@
-﻿using Countries.Server.Models;
-using Countries.Server.Models.DTOs;
+﻿using Countries.Server.Models.DTOs;
 using Countries.Server.Repositories;
 
 namespace Countries.Server.Services
@@ -13,14 +12,9 @@ namespace Countries.Server.Services
             _countryRepository = countryRepository;
         }
 
-        public async Task<IList<GetCountriesResponse>> GetCountries(int page, int pageSize)
+        public async Task<GetCountriesResponse> GetCountries(GetCountriesRequest getCountriesRequest)
         {
-            return await _countryRepository.GetCountries(page, pageSize);
-        }
-
-        public async Task<IList<Country>> GetCountriesWithFilter()
-        {
-            return await _countryRepository.GetCountriesWithFilter();
+            return await _countryRepository.GetCountries(getCountriesRequest);
         }
     }
 }

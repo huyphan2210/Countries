@@ -117,21 +117,30 @@ export class CountryService {
       page?: number;
       /**  */
       pageSize?: number;
+      /**  */
+      searchString?: string;
+      /**  */
+      region?: string;
     } = {} as any,
     options: IRequestOptions = {}
-  ): Promise<GetCountriesResponse[]> {
+  ): Promise<GetCountriesResponse> {
     return new Promise((resolve, reject) => {
       let url = basePath + '/country';
 
       const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
-      configs.params = { page: params['page'], pageSize: params['pageSize'] };
+      configs.params = {
+        Page: params['page'],
+        PageSize: params['pageSize'],
+        SearchString: params['searchString'],
+        Region: params['region']
+      };
 
       axios(configs, resolve, reject);
     });
   }
 }
 
-export interface GetCountriesResponse {
+export interface CountryBriefInfo {
   /**  */
   name?: string;
 
@@ -146,4 +155,12 @@ export interface GetCountriesResponse {
 
   /**  */
   flag?: string;
+}
+
+export interface GetCountriesResponse {
+  /**  */
+  totalCountries?: string;
+
+  /**  */
+  countries?: CountryBriefInfo[];
 }

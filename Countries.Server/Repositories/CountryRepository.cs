@@ -1,5 +1,6 @@
 ﻿using Countries.Server.Models;
 using Countries.Server.Models.DTOs;
+using MongoDB.Bson;
 using MongoDB.Driver;
 using System.Security.Authentication;
 
@@ -24,18 +25,27 @@ namespace Countries.Server.Repositories
             _countries = database.GetCollection<Country>("country");
         }
 
-        public async Task<IList<GetCountriesResponse>> GetCountries(int page, int pageSize)
+        public async Task<GetCountriesResponse> GetCountries(GetCountriesRequest getCountriesRequest)
         {
+            var filter = FilterCountries(getCountriesRequest);
+
             var option = new FindOptions<Country>
             {
-                Skip = (page - 1) * pageSize,
-                Limit = pageSize
+                Skip = (getCountriesRequest.Page - 1) * getCountriesRequest.PageSize,
+                Limit = getCountriesRequest.PageSize,
+                Sort = Builders<Country>.Sort.Ascending(country => country.Name)
             };
 
             try
             {
-                var allCountries = await _countries.FindAsync(country => true, option).ConfigureAwait(false);
-                var countries = allCountries.ToList().Select(country => new GetCountriesResponse
+                var countTask = _countries.CountDocumentsAsync(filter);
+                var fetchTask = _countries.FindAsync(filter, option);
+                await Task.WhenAll(countTask, fetchTask).ConfigureAwait(false);
+
+                var totalDocuments = await countTask;
+                var fetchedCountries = await fetchTask;
+
+                var countries = fetchedCountries.ToList().Select(country => new CountryBriefInfo
                 {
                     Name = country.Name,
                     Region = country.Region,
@@ -43,7 +53,12 @@ namespace Countries.Server.Repositories
                     Population = country.Population,
                     Flag = country.Flag,
                 });
-                return countries.ToList();
+
+                return new GetCountriesResponse
+                {
+                    TotalCountries = totalDocuments,
+                    Countries = countries.ToList()
+                };
             }
             catch (Exception e)
             {
@@ -52,9 +67,23 @@ namespace Countries.Server.Repositories
             }
         }
 
-        public async Task<IList<Country>> GetCountriesWithFilter()
+        private static FilterDefinition<Country> FilterCountries(GetCountriesRequest getCountriesRequest)
         {
-            return new List<Country>();
+            var filterList = new List<FilterDefinition<Country>>();
+            if (!string.IsNullOrEmpty(getCountriesRequest.SearchString))
+            {
+                filterList.Add(Builders<Country>.Filter.Regex(nameof(Country.Name),
+                    new BsonRegularExpression(getCountriesRequest.SearchString, "i")));
+            }
+
+            if (!string.IsNullOrEmpty(getCountriesRequest.Region))
+            {
+                filterList.Add(Builders<Country>.Filter.Eq(nameof(Country.Region), getCountriesRequest.Region));
+            }
+
+            return filterList.Count > 0
+                ? Builders<Country>.Filter.And(filterList)
+                : Builders<Country>.Filter.Empty;
         }
     }
 }

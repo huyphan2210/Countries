@@ -18,10 +18,10 @@ namespace Countries.Server.Controllers
         }
 
         [HttpGet(Name = "GetCountries")]
-        public async Task<IList<GetCountriesResponse>> GetCountries([FromQuery] int page, [FromQuery] int pageSize)
+        public async Task<GetCountriesResponse> GetCountries([FromQuery] GetCountriesRequest getCountriesRequest)
         {
             _logger.LogInformation("Start to get countries");
-           return await _countryService.GetCountries(page, pageSize);
+           return await _countryService.GetCountries(getCountriesRequest);
         }
     }
 }

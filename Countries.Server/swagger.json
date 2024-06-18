@@ -19,25 +19,32 @@
         "parameters": [
           {
             "in": "query",
-            "name": "page",
+            "name": "Page",
             "type": "integer",
             "format": "int32"
           },
           {
             "in": "query",
-            "name": "pageSize",
+            "name": "PageSize",
             "type": "integer",
             "format": "int32"
+          },
+          {
+            "in": "query",
+            "name": "SearchString",
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "Region",
+            "type": "string"
           }
         ],
         "responses": {
           "200": {
             "description": "OK",
             "schema": {
-              "type": "array",
-              "items": {
-                "$ref": "#/definitions/GetCountriesResponse"
-              }
+              "$ref": "#/definitions/GetCountriesResponse"
             }
           }
         }
@@ -45,7 +52,7 @@
     }
   },
   "definitions": {
-    "GetCountriesResponse": {
+    "CountryBriefInfo": {
       "type": "object",
       "properties": {
         "name": {
@@ -63,6 +70,22 @@
         },
         "flag": {
           "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "GetCountriesResponse": {
+      "type": "object",
+      "properties": {
+        "totalCountries": {
+          "format": "int64",
+          "type": "integer"
+        },
+        "countries": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/CountryBriefInfo"
+          }
         }
       },
       "additionalProperties": false

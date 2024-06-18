@@ -5,7 +5,6 @@ namespace Countries.Server.Services
 {
     public interface ICountryService
     {
-        public Task<IList<GetCountriesResponse>> GetCountries(int page, int pageSize);
-        public Task<IList<Country>> GetCountriesWithFilter();
+        public Task<GetCountriesResponse> GetCountries(GetCountriesRequest getCountriesRequest);
     }
 }
