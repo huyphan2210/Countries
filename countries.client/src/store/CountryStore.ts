@@ -1,5 +1,5 @@
 import { createStore } from "vuex";
-import { type GetCountriesResponse as FrontPageCountries } from "@/swagger/api";
+import { type CountryBriefInfo } from "@/swagger/api";
 import CountryAPI from "@/api/country-api";
 
 const countryAPI = new CountryAPI();
@@ -9,6 +9,9 @@ export const MUTATION_TYPES = {
   setIsDarkMode: "setIsDarkMode",
   setCurrentRegion: "setCurrentRegion",
   setPagination: "setPagination",
+  setSearchString: "setSearchString",
+  setRegion: "setRegion",
+  setTotalCountries: "setTotalCountries",
 };
 
 export const ACTION_TYPES = {
@@ -17,25 +20,35 @@ export const ACTION_TYPES = {
 
 export interface CountryState {
   currentRegion: string;
-  countries: FrontPageCountries[];
+  totalCountries: number;
+  countries: CountryBriefInfo[];
   isDarkMode: boolean;
   isFetchingData: boolean;
   currentPage: number;
   pageSize: number;
+  searchString?: string;
+  region?: string;
 }
 
 export const store = createStore<CountryState>({
   state: {
     currentRegion: "",
+    totalCountries: 0,
     countries: [],
     isDarkMode: localStorage.getItem("isDarkMode") ? true : false,
     isFetchingData: false,
     currentPage: 1,
     pageSize: 20,
+    searchString: undefined,
+    region: undefined,
   },
   mutations: {
-    setCountries(state: CountryState, countries: FrontPageCountries[]) {
-      state.countries = [...state.countries, ...countries];
+    setCountries(state: CountryState, countries: CountryBriefInfo[]) {
+      if (state.currentPage > 1) {
+        state.countries = [...state.countries, ...countries];
+      } else {
+        state.countries = [...countries];
+      }
     },
     setIsDarkMode(state: CountryState) {
       state.isDarkMode = !state.isDarkMode;
@@ -53,16 +66,30 @@ export const store = createStore<CountryState>({
     setPagination(state: CountryState) {
       state.currentPage += 1;
     },
+    setSearchString(state: CountryState, searchString: string) {
+      state.currentPage = 1;
+      state.searchString = searchString;
+    },
+    setRegion(state: CountryState, region: string) {
+      state.currentPage = 1;
+      state.region = region;
+    },
+    setTotalCountries(state: CountryState, count: number) {
+      state.totalCountries = count;
+    },
   },
   actions: {
     async getCountries({ commit }): Promise<void> {
       try {
         this.state.isFetchingData = true;
-        const countries = await countryAPI.getCountries(
+        const { totalCountries, countries } = await countryAPI.getCountries(
           this.state.currentPage,
-          this.state.pageSize
+          this.state.pageSize,
+          this.state.searchString,
+          this.state.region
         );
         commit(MUTATION_TYPES.setCountries, countries);
+        commit(MUTATION_TYPES.setTotalCountries, totalCountries);
       } catch (error) {
         throw new Error();
       } finally {
