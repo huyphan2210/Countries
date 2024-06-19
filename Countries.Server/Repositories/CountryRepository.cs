@@ -16,6 +16,7 @@ namespace Countries.Server.Repositories
             var connectionStringTemplate = configuration.GetConnectionString("MongoDB") ?? "";
             var connectionPassword = Environment.GetEnvironmentVariable("MONGODB_PASSWORD") ?? "";
             var connectionString = connectionStringTemplate.Replace("{password}", connectionPassword);
+            Console.WriteLine(connectionString);
             var settings = MongoClientSettings.FromConnectionString(connectionString);
             settings.ServerApi = new ServerApi(ServerApiVersion.V1);
             settings.SslSettings = new SslSettings() { EnabledSslProtocols = SslProtocols.Tls12 };
