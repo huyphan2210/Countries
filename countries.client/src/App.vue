@@ -267,7 +267,7 @@ main {
 @media screen and (min-width: 768px) {
   main {
     .countries-section {
-      grid-template-columns: repeat(2, auto);
+      grid-template-columns: repeat(2, calc((100% - 3rem) / 2));
       gap: 3rem;
     }
   }
@@ -276,7 +276,7 @@ main {
 @media screen and (min-width: 1024px) {
   main {
     .countries-section {
-      grid-template-columns: repeat(3, auto);
+      grid-template-columns: repeat(3, calc((100% - 12rem) / 3));
       gap: 6rem;
     }
   }
@@ -285,7 +285,7 @@ main {
 @media screen and (min-width: 1440px) {
   main {
     .countries-section {
-      grid-template-columns: repeat(4, auto);
+      grid-template-columns: repeat(4, calc((100% - 18rem) / 4));
     }
   }
 }
