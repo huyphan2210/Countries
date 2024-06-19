@@ -38,7 +38,7 @@ export const store = createStore<CountryState>({
     isDarkMode: localStorage.getItem("isDarkMode") ? true : false,
     isFetchingData: false,
     currentPage: 1,
-    pageSize: 20,
+    pageSize: 12,
     searchString: undefined,
     region: undefined,
   },
