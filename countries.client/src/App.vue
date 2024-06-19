@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { Store, useStore } from "vuex";
 import { ref, onMounted, onUnmounted } from "vue";
+import { debounce } from "lodash";
 import {
   ACTION_TYPES,
   MUTATION_TYPES,
@@ -24,7 +25,7 @@ const regions: string[] = ["Africa", "America", "Asia", "Europe", "Oceania"];
 
 const isFilterOpened = ref(false);
 
-const handleScroll = () => {
+const handleScroll = debounce(() => {
   const scrollTop = window.scrollY || document.documentElement.scrollTop;
   const scrollHeight = document.documentElement.scrollHeight;
   const clientHeight = document.documentElement.clientHeight;
@@ -36,7 +37,13 @@ const handleScroll = () => {
     commit(MUTATION_TYPES.setPagination);
     dispatch(ACTION_TYPES.getCountries);
   }
+}, 200);
+
+const setSearchString = (value: string) => {
+  commit("setSearchString", value);
+  dispatch("getCountries");
 };
+const debouncedSetSearchString = debounce(setSearchString, 300);
 
 onMounted(() => {
   window.addEventListener("scroll", handleScroll);
@@ -77,9 +84,9 @@ onUnmounted(() => {
         />
         <img v-else :src="searchDark" loading="lazy" alt="Search Dark" />
         <input
-          @change="(e) => {
-            commit(MUTATION_TYPES.setSearchString, (e.currentTarget as HTMLInputElement).value);
-            dispatch(ACTION_TYPES.getCountries);
+          @input="(e) => {
+            const inputValue = (e.currentTarget as HTMLInputElement).value;
+            debouncedSetSearchString(inputValue);
           }"
           placeholder="Search for a country..."
           type="text"
@@ -164,8 +171,6 @@ header {
 
 main {
   .filter-section {
-    position: sticky;
-    top: 0;
     display: flex;
     justify-content: space-between;
     align-items: center;
