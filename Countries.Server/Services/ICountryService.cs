@@ -6,5 +6,6 @@ namespace Countries.Server.Services
     public interface ICountryService
     {
         public Task<GetCountriesResponse> GetCountries(GetCountriesRequest getCountriesRequest);
+        public Task<Country> GetCountry(string countryName);
     }
 }

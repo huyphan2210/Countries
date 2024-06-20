@@ -125,7 +125,7 @@ export class CountryService {
     options: IRequestOptions = {}
   ): Promise<GetCountriesResponse> {
     return new Promise((resolve, reject) => {
-      let url = basePath + '/country';
+      let url = basePath + '/api/countries';
 
       const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
       configs.params = {
@@ -138,6 +138,108 @@ export class CountryService {
       axios(configs, resolve, reject);
     });
   }
+  /**
+   *
+   */
+  static getCountry(
+    params: {
+      /**  */
+      countryName: string;
+    } = {} as any,
+    options: IRequestOptions = {}
+  ): Promise<Country> {
+    return new Promise((resolve, reject) => {
+      let url = basePath + '/api/countries/{countryName}';
+      url = url.replace('{countryName}', params['countryName'] + '');
+
+      const configs: IRequestConfig = getConfigs('get', 'application/json', url, options);
+
+      axios(configs, resolve, reject);
+    });
+  }
+}
+
+export interface Country {
+  /**  */
+  id?: ObjectId;
+
+  /**  */
+  name?: string;
+
+  /**  */
+  topLevelDomain: string[];
+
+  /**  */
+  alpha2Code?: string;
+
+  /**  */
+  alpha3Code?: string;
+
+  /**  */
+  callingCodes: string[];
+
+  /**  */
+  capital?: string;
+
+  /**  */
+  altSpellings: string[];
+
+  /**  */
+  subRegion?: string;
+
+  /**  */
+  region?: string;
+
+  /**  */
+  population?: number;
+
+  /**  */
+  latLng: number[];
+
+  /**  */
+  demonym?: string;
+
+  /**  */
+  area?: number;
+
+  /**  */
+  gini?: number;
+
+  /**  */
+  timezones: string[];
+
+  /**  */
+  borders: string[];
+
+  /**  */
+  nativeName?: string;
+
+  /**  */
+  numericCode?: string;
+
+  /**  */
+  flags: Flag;
+
+  /**  */
+  currencies: Currency[];
+
+  /**  */
+  languages: Language[];
+
+  /**  */
+  translations: Translation;
+
+  /**  */
+  flag?: string;
+
+  /**  */
+  regionalBlocs: RegionalBloc[];
+
+  /**  */
+  cioc?: string;
+
+  /**  */
+  independent?: boolean;
 }
 
 export interface CountryBriefInfo {
@@ -157,10 +259,109 @@ export interface CountryBriefInfo {
   flag?: string;
 }
 
+export interface Currency {
+  /**  */
+  code?: string;
+
+  /**  */
+  name?: string;
+
+  /**  */
+  symbol?: string;
+}
+
+export interface Flag {
+  /**  */
+  svg?: string;
+
+  /**  */
+  png?: string;
+}
+
 export interface GetCountriesResponse {
   /**  */
   totalCountries?: string;
 
   /**  */
   countries?: CountryBriefInfo[];
+}
+
+export interface Language {
+  /**  */
+  iso6391?: string;
+
+  /**  */
+  iso6392?: string;
+
+  /**  */
+  name?: string;
+
+  /**  */
+  nativeName?: string;
+}
+
+export interface ObjectId {
+  /**  */
+  timestamp?: number;
+
+  /**  */
+  machine?: number;
+
+  /**  */
+  pid?: number;
+
+  /**  */
+  increment?: number;
+
+  /**  */
+  creationTime?: Date;
+}
+
+export interface RegionalBloc {
+  /**  */
+  acronym?: string;
+
+  /**  */
+  name?: string;
+
+  /**  */
+  otherNames?: string[];
+
+  /**  */
+  otherAcronyms?: string[];
+}
+
+export interface Translation {
+  /**  */
+  br?: string;
+
+  /**  */
+  pt?: string;
+
+  /**  */
+  nl?: string;
+
+  /**  */
+  hr?: string;
+
+  /**  */
+  fa?: string;
+
+  /**  */
+  de?: string;
+
+  /**  */
+  es?: string;
+
+  /**  */
+  fr?: string;
+
+  /**  */
+  ja?: string;
+
+  /**  */
+  it?: string;
+
+  /**  */
+  hu?: string;
 }

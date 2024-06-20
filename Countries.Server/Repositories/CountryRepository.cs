@@ -40,20 +40,18 @@ namespace Countries.Server.Repositories
 
         private static async Task<string?> GetPublicIpAddressAsync()
         {
-            using (var client = new HttpClient())
+            using var client = new HttpClient();
+            try
             {
-                try
-                {
-                    var response = await client.GetAsync("https://api.ipify.org");
-                    response.EnsureSuccessStatusCode();
-                    var ipAddress = await response.Content.ReadAsStringAsync();
-                    return ipAddress;
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine("An error occurred: " + ex.Message);
-                    return null;
-                }
+                var response = await client.GetAsync("https://api.ipify.org");
+                response.EnsureSuccessStatusCode();
+                var ipAddress = await response.Content.ReadAsStringAsync();
+                return ipAddress;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("An error occurred: " + ex.Message);
+                return null;
             }
         }
 
@@ -116,6 +114,21 @@ namespace Countries.Server.Repositories
             return filterList.Count > 0
                 ? Builders<Country>.Filter.And(filterList)
                 : Builders<Country>.Filter.Empty;
+        }
+
+        public async Task<Country> GetCountry(string countryName)
+        {
+            try
+            {
+                var country =
+                    await _countries.FindAsync(Builders<Country>.Filter.Eq(nameof(Country.Name), countryName));
+                return country.FirstOrDefault();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
         }
     }
 }

@@ -27,4 +27,8 @@ export default class CountryAPI {
       region,
     });
   }
+
+  getCountry(countryName: string) {
+    return CountryService.getCountry({ countryName });
+  }
 }

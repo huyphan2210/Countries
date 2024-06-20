@@ -1,6 +1,6 @@
 @Countries.Server_HostAddress = http://localhost:5041
 
-GET {{Countries.Server_HostAddress}}/country/
+GET {{Countries.Server_HostAddress}}/api/countries/
 Accept: application/json
 
 ###
