@@ -7,8 +7,11 @@ import {
   MUTATION_TYPES,
   type CountryState,
 } from "./store/CountryStore";
+
 import CountryCard from "./components/CountryCard.vue";
+import CountryModal from "./components/CountryModal.vue";
 import LoadingScreen from "./components/LoadingScreen.vue";
+
 import moonLight from "./assets/moon-light.svg";
 import moonDark from "./assets/moon-dark.svg";
 import searchLight from "./assets/search-light.svg";
@@ -32,7 +35,8 @@ const handleScroll = debounce(() => {
 
   if (
     scrollTop + clientHeight >= scrollHeight - 5 &&
-    state.countries.length < state.totalCountries
+    state.countries.length < state.totalCountries &&
+    !state.currentCountry
   ) {
     commit(MUTATION_TYPES.setPagination);
     dispatch(ACTION_TYPES.getCountries);
@@ -67,8 +71,15 @@ onUnmounted(() => {
         :src="moonLight"
         loading="lazy"
         alt="Moon Light"
+        title="Moon Light"
       />
-      <img v-else :src="moonDark" loading="lazy" alt="Moon Dark" />
+      <img
+        v-else
+        :src="moonDark"
+        loading="lazy"
+        alt="Moon Dark"
+        title="Moon Dark"
+      />
       <span>Dark mode</span>
     </button>
   </header>
@@ -81,8 +92,15 @@ onUnmounted(() => {
           :src="searchLight"
           loading="lazy"
           alt="Search Light"
+          title="Search Light"
         />
-        <img v-else :src="searchDark" loading="lazy" alt="Search Dark" />
+        <img
+          v-else
+          :src="searchDark"
+          loading="lazy"
+          alt="Search Dark"
+          title="Search Dark"
+        />
         <input
           @input="(e) => {
             const inputValue = (e.currentTarget as HTMLInputElement).value;
@@ -105,7 +123,7 @@ onUnmounted(() => {
         <span>{{
           state.currentRegion ? state.currentRegion : "Filter by Region"
         }}</span>
-        <img :src="chevron" loading="lazy" alt="Chevron" />
+        <img :src="chevron" loading="lazy" alt="Chevron" title="Chevron" />
         <ul class="filter-section__options__region">
           <li v-for="(region, index) in regions" :key="index">
             <button
@@ -130,6 +148,7 @@ onUnmounted(() => {
         :country="country"
       ></country-card>
     </section>
+    <country-modal />
   </main>
   <footer></footer>
 </template>
@@ -149,6 +168,7 @@ header {
   position: sticky;
   top: 0;
   z-index: 1;
+  height: 2rem;
   h1 {
     font-size: 1rem;
   }
