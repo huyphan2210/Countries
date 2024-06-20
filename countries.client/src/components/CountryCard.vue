@@ -1,14 +1,26 @@
 <script lang="ts" setup>
-import type { CountryBriefInfo  } from "@/swagger/api";
+import { ACTION_TYPES, type CountryState } from "@/store/CountryStore";
+import type { CountryBriefInfo } from "@/swagger/api";
 import { defineProps } from "vue";
+import { useStore, type Store } from "vuex";
 
 const { country } = defineProps<{ country: CountryBriefInfo }>();
+const { dispatch }: Store<CountryState> = useStore();
 </script>
 
 <template>
-  <button type="button" class="country-card">
+  <button
+    type="button"
+    class="country-card"
+    @click="() => dispatch(ACTION_TYPES.getCountry, country.name)"
+  >
     <div class="country-card__header">
-      <img :src="country.flag" loading="lazy" :alt="country.name" />
+      <img
+        :src="country.flag"
+        loading="lazy"
+        :alt="country.name"
+        :title="country.name"
+      />
     </div>
     <div class="country-card__body">
       <h2>{{ country.name }}</h2>
