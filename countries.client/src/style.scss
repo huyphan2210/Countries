@@ -5,7 +5,7 @@
   --input-color: hsl(0, 0%, 52%);
   --text-color: hsl(200, 15%, 8%);
   --main-bg: hsl(0, 0%, 98%);
-  
+
   --border-radius: 0.5rem;
   &.dark-mode {
     --element-bg: hsl(209, 23%, 22%);
@@ -28,6 +28,10 @@ body {
   justify-content: center;
   transition: 0.3s;
   background-color: var(--main-bg);
+
+  &.no-scroll {
+    overflow: hidden;
+  }
 
   #app {
     flex-grow: 1;
