@@ -19,24 +19,42 @@ namespace Countries.Server.Repositories
             var connectionString = connectionStringTemplate.Replace("{password}", connectionPassword);
 
             var proxyUrlString = Environment.GetEnvironmentVariable("QUOTAGUARDSTATIC_URL");
-            var proxyUri = new Uri(proxyUrlString ?? "");
-
-            var httpClientHandler = new HttpClientHandler
+            if (string.IsNullOrEmpty(proxyUrlString))
             {
-                Proxy = new WebProxy(proxyUri),
-                UseProxy = true,
-            };
-
-            // Create an HttpClient to use the proxy
-            var client = new HttpClient(httpClientHandler);
+                throw new InvalidOperationException("QuotaGuard Static URL is not set.");
+            }
 
             var settings = MongoClientSettings.FromConnectionString(connectionString);
             settings.ServerApi = new ServerApi(ServerApiVersion.V1);
-            settings.SslSettings = new SslSettings() { EnabledSslProtocols = SslProtocols.Tls12 };
+            settings.SslSettings = new SslSettings { EnabledSslProtocols = SslProtocols.Tls12 };
 
             var mongoClient = new MongoClient(settings);
             var database = mongoClient.GetDatabase("country-database");
             _countries = database.GetCollection<Country>("country");
+            Task.Run(async () =>
+            {
+                var publicIp = await GetPublicIpAddressAsync();
+                Console.WriteLine("Public IP Address: " + publicIp);
+            }).Wait();
+        }
+
+        private static async Task<string?> GetPublicIpAddressAsync()
+        {
+            using (var client = new HttpClient())
+            {
+                try
+                {
+                    var response = await client.GetAsync("https://api.ipify.org");
+                    response.EnsureSuccessStatusCode();
+                    var ipAddress = await response.Content.ReadAsStringAsync();
+                    return ipAddress;
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("An error occurred: " + ex.Message);
+                    return null;
+                }
+            }
         }
 
         public async Task<GetCountriesResponse> GetCountries(GetCountriesRequest getCountriesRequest)
