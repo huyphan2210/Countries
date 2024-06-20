@@ -1,5 +1,5 @@
 import { createStore } from "vuex";
-import { type CountryBriefInfo } from "@/swagger/api";
+import { type Country, type CountryBriefInfo } from "@/swagger/api";
 import CountryAPI from "@/api/country-api";
 
 const countryAPI = new CountryAPI();
@@ -10,16 +10,18 @@ export const MUTATION_TYPES = {
   setCurrentRegion: "setCurrentRegion",
   setPagination: "setPagination",
   setSearchString: "setSearchString",
-  setRegion: "setRegion",
   setTotalCountries: "setTotalCountries",
+  setCurrentCountry: "setCurrentCountry",
 };
 
 export const ACTION_TYPES = {
   getCountries: "getCountries",
+  getCountry: "getCountry",
 };
 
 export interface CountryState {
   currentRegion: string;
+  currentCountry?: Country;
   totalCountries: number;
   countries: CountryBriefInfo[];
   isDarkMode: boolean;
@@ -27,7 +29,6 @@ export interface CountryState {
   currentPage: number;
   pageSize: number;
   searchString?: string;
-  region?: string;
 }
 
 export const store = createStore<CountryState>({
@@ -40,7 +41,6 @@ export const store = createStore<CountryState>({
     currentPage: 1,
     pageSize: 12,
     searchString: undefined,
-    region: undefined,
   },
   mutations: {
     setCountries(state: CountryState, countries: CountryBriefInfo[]) {
@@ -61,6 +61,7 @@ export const store = createStore<CountryState>({
       }
     },
     setCurrentRegion(state: CountryState, region: string) {
+      state.currentPage = 1;
       state.currentRegion = region;
     },
     setPagination(state: CountryState) {
@@ -70,12 +71,16 @@ export const store = createStore<CountryState>({
       state.currentPage = 1;
       state.searchString = searchString;
     },
-    setRegion(state: CountryState, region: string) {
-      state.currentPage = 1;
-      state.region = region;
-    },
     setTotalCountries(state: CountryState, count: number) {
       state.totalCountries = count;
+    },
+    setCurrentCountry(state: CountryState, country?: Country) {
+      state.currentCountry = country;
+      if (state.currentCountry) {
+        document.getElementsByTagName("body")[0].className = "no-scroll";
+      } else {
+        document.getElementsByTagName("body")[0].className = "";
+      }
     },
   },
   actions: {
@@ -86,10 +91,21 @@ export const store = createStore<CountryState>({
           this.state.currentPage,
           this.state.pageSize,
           this.state.searchString,
-          this.state.region
+          this.state.currentRegion
         );
         commit(MUTATION_TYPES.setCountries, countries);
         commit(MUTATION_TYPES.setTotalCountries, totalCountries);
+      } catch (error) {
+        throw new Error();
+      } finally {
+        this.state.isFetchingData = false;
+      }
+    },
+    async getCountry({ commit }, countryName: string): Promise<void> {
+      try {
+        this.state.isFetchingData = true;
+        const country = await countryAPI.getCountry(countryName);
+        commit(MUTATION_TYPES.setCurrentCountry, country);
       } catch (error) {
         throw new Error();
       } finally {
