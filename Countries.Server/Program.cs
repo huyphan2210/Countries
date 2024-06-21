@@ -33,6 +33,8 @@ var app = builder.Build();
 app.UseDefaultFiles();
 app.UseStaticFiles();
 
+app.UseCors("AllowSpecificOrigin");
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
