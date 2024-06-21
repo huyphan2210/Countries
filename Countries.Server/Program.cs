@@ -31,7 +31,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseCors(options =>
 {
-    options.WithOrigins("");
+    options.WithOrigins("https://countries-huy-phan.netlify.app/");
     options.AllowAnyMethod();
     options.AllowAnyHeader();
 });
