@@ -17,6 +17,17 @@ builder.Services.AddScoped<ICountryService, CountryService>();
 // Add repos
 builder.Services.AddScoped<ICountryRepository, CountryRepository>();
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowSpecificOrigin", builder =>
+    {
+        builder.WithOrigins("https://countries-huy-phan.netlify.app")
+            .AllowAnyMethod()
+            .AllowAnyHeader()
+            .AllowCredentials();
+    });
+});
+
 var app = builder.Build();
 
 app.UseDefaultFiles();
@@ -28,13 +39,6 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
-app.UseCors(options =>
-{
-    options.WithOrigins("https://countries-huy-phan.netlify.app/");
-    options.AllowAnyMethod();
-    options.AllowAnyHeader();
-});
 
 // Save the Swagger JSON to a file
 var filePath = Path.Combine(app.Environment.ContentRootPath, "swagger.json");
