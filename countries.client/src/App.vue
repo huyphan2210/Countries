@@ -24,7 +24,7 @@ dispatch(ACTION_TYPES.getCountries);
 if (state.isDarkMode) {
   document.documentElement.classList.add("dark-mode");
 }
-const regions: string[] = ["Africa", "America", "Asia", "Europe", "Oceania"];
+const regions: string[] = ["Africa", "Americas", "Asia", "Europe", "Oceania"];
 
 const isFilterOpened = ref(false);
 
