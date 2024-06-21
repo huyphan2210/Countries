@@ -34,7 +34,7 @@ const { state, commit }: Store<CountryState> = useStore();
         <div class="country-modal__info__text__details">
           <div class="country-modal__info__text__details__1">
             <p>
-              <span>Native name: </span>
+              <span>Native Name: </span>
               <span>{{ state.currentCountry?.nativeName }}</span>
             </p>
             <p>
@@ -46,30 +46,74 @@ const { state, commit }: Store<CountryState> = useStore();
               <span>{{ state.currentCountry?.region }}</span>
             </p>
             <p>
-              <span>Sub region: </span>
+              <span>Sub Region: </span>
               <span>{{ state.currentCountry?.subRegion }}</span>
             </p>
-            <p>
+            <p v-if="state.currentCountry?.capital">
               <span>Capital: </span>
               <span>{{ state.currentCountry?.capital }}</span>
             </p>
           </div>
           <div class="country-modal__info__text__details__2">
             <p>
-              <span>Top level domain: </span>
+              <span
+                v-if="
+                  state.currentCountry &&
+                  state.currentCountry?.topLevelDomain.length > 1
+                "
+                >Top Level Domains:
+              </span>
+              <span v-else>Top Level Domain: </span>
               <span>{{ state.currentCountry?.topLevelDomain.join(", ") }}</span>
             </p>
-            <p>
-              <span>Population: </span>
-              <span>{{ state.currentCountry?.population }}</span>
+            <p v-if="state.currentCountry?.currencies">
+              <span
+                v-if="
+                  state.currentCountry &&
+                  state.currentCountry?.currencies.length > 1
+                "
+                >Currencies:
+              </span>
+              <span v-else>Currency: </span>
+              <span>{{
+                state.currentCountry?.currencies
+                  .map((currency) => currency.name)
+                  .join(", ")
+              }}</span>
             </p>
             <p>
-              <span>Region: </span>
-              <span>{{ state.currentCountry?.region }}</span>
+              <span
+                v-if="
+                  state.currentCountry &&
+                  state.currentCountry?.languages.length > 1
+                "
+                >Languages:
+              </span>
+              <span v-else>Language: </span>
+              <span>{{
+                state.currentCountry?.languages
+                  .map((language) => language.name)
+                  .join(", ")
+              }}</span>
             </p>
           </div>
         </div>
-        <div class="country-modal__info__text__borders"></div>
+        <div
+          v-if="state.currentCountry?.borders"
+          class="country-modal__info__text__borders"
+        >
+          <h3>Border Countries:</h3>
+          <div class="country-modal__info__text__borders__countries">
+            <button
+              class="country-modal__info__text__borders__countries__name"
+              v-for="(border, index) in state.currentCountry?.borders"
+              :key="index"
+              type="button"
+            >
+              {{ border }}
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -110,7 +154,9 @@ const { state, commit }: Store<CountryState> = useStore();
 
   &__info {
     margin-top: 3rem;
-
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
     img {
       width: 100%;
     }
@@ -118,12 +164,32 @@ const { state, commit }: Store<CountryState> = useStore();
     &__text {
       &__details {
         display: flex;
-        justify-content: space-between;
         flex-wrap: wrap;
         gap: 3rem;
         p {
           span:first-child {
             font-weight: 700;
+          }
+        }
+        margin-bottom: 3rem;
+      }
+
+      &__borders {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 1rem;
+
+        &__countries {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 0.5rem;
+
+          button {
+            border: none;
+            padding-inline: 1.5rem;
+            background-color: var(--element-bg);
+            box-shadow: 0 0 1rem 0.1rem rgba(0, 0, 0, 0.1);
           }
         }
       }
@@ -138,6 +204,13 @@ const { state, commit }: Store<CountryState> = useStore();
       grid-template-columns: repeat(2, 45%);
       gap: 10%;
     }
+  }
+}
+
+@media screen and (min-width: 1024px) {
+  .country-modal {
+    padding-inline: 5rem;
+    width: calc(100vw - 10rem);
   }
 }
 </style>
