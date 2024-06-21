@@ -171,6 +171,7 @@ header {
   height: 2rem;
   h1 {
     font-size: 1rem;
+    font-weight: 800;
   }
   .dark-mode-button {
     border: none;
@@ -294,7 +295,14 @@ main {
 }
 
 @media screen and (min-width: 1024px) {
+  header {
+    padding-inline: 5rem;
+    h1 {
+      font-size: 1.5rem;
+    }
+  }
   main {
+    padding-inline: 5rem;
     .countries-section {
       grid-template-columns: repeat(3, calc((100% - 12rem) / 3));
       gap: 6rem;
