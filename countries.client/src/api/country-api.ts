@@ -3,7 +3,9 @@ import { CountryService, serviceOptions } from "../swagger/api";
 
 export default class CountryAPI {
   axiosInstance: AxiosInstance = axios.create({
-    baseURL: import.meta.env.PROD ? "" : "",
+    baseURL: import.meta.env.PROD
+      ? "https://countries-api-4f70bf4feb75.herokuapp.com/"
+      : "",
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json",
