@@ -44,8 +44,9 @@ const { dispatch }: Store<CountryState> = useStore();
   &__header {
     img {
       width: 100%;
-      border-radius: var(--border-radius) var(--border-radius) 0 0;
       aspect-ratio: 1.5;
+      border-radius: var(--border-radius) var(--border-radius) 0 0;
+      object-fit: cover;
     }
   }
 
